@@ -1,3 +1,7 @@
+Meet the requirements!
+
+![Screenshot] (https://raw.githubusercontent.com/phamd1989/BasicTwitterApp/master/gif/basic_twitter.gif)
+
 # RestClientTemplate
 
 ## Overview
