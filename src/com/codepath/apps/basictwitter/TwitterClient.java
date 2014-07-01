@@ -4,11 +4,13 @@ import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.codepath.apps.basictwitter.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /*
@@ -31,7 +33,8 @@ public class TwitterClient extends OAuthBaseClient {
 	public static final String REST_CALLBACK_URL = "oauth://cpbasictweets"; // Change this (here and in manifest)
 	
 	// maxId used for pagination
-	long maxId = 0;
+	public long maxId = 0;
+	public long sinceId = 0;
 	String tweet = "";
 	
 	public TwitterClient(Context context) {
@@ -53,9 +56,18 @@ public class TwitterClient extends OAuthBaseClient {
 	
 	
 	public void getUserMeInfo(AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("users/show.json");
+		String apiUrl = getApiUrl("account/verify_credentials.json");
+		client.get(apiUrl, null, handler);
+	}
+	
+	public void getUserTimeline(String screen_name, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("screen_name", "DungPhamd1989");
+		if ( screen_name != null) {
+			params.put("screen_name", screen_name);
+		} else {
+			params = null;
+		}
 		client.get(apiUrl, params, handler);
 	}
 	
@@ -71,31 +83,61 @@ public class TwitterClient extends OAuthBaseClient {
 			return;
 		}
 		maxId = aTweets.getItem(aTweets.getCount() - 1).getUid();
+		Log.d("debug", Long.toString(maxId));
 		maxId--;
 	}
-	
 	
 	public void setTweetBody(String tweetBody) {
 		tweet = tweetBody;
 	}
-	
-	
-	// CHANGE THIS
-	// DEFINE METHODS for different API endpoints here
-//	public void getInterestingnessList(AsyncHttpResponseHandler handler) {
-//		String apiUrl = getApiUrl("?nojsoncallback=1&method=flickr.interestingness.getList");
-//		// Can specify query string params directly or through RequestParams.
-//		RequestParams params = new RequestParams();
-//		params.put("format", "json");
-//		client.get(apiUrl, params, handler);
-//	}
 
-	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-	 * 	  i.e getApiUrl("statuses/home_timeline.json");
-	 * 2. Define the parameters to pass to the request (query or body)
-	 *    i.e RequestParams params = new RequestParams("foo", "bar");
-	 * 3. Define the request method and make a call to the client
-	 *    i.e client.get(apiUrl, params, handler);
-	 *    i.e client.post(apiUrl, params, handler);
-	 */
+
+	public void refreshHomeTimeline(
+			AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/home_timeline.json");
+		RequestParams params = new RequestParams();
+		params.put("since_id", Long.toString(sinceId));
+		client.get(apiUrl, params, handler);
+	}
+
+	public void setSinceId(ArrayAdapter<Tweet> aTweets) {
+		if (aTweets == null || aTweets.isEmpty()) {
+			return;
+		}
+		sinceId = aTweets.getItem(0).getUid();
+		Log.d("debug", "since_id: " + Long.toString(sinceId));
+	}
+
+
+	public void getMentionTimelineList(
+			AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+		if (maxId == 0) {
+			client.get(apiUrl, null, handler);
+		} else {
+			RequestParams params = new RequestParams();
+			params.put("max_id", Long.toString(maxId));
+			client.get(apiUrl, params, handler);
+		}
+
+//		// Can specify query string params directly or through RequestParams.
+//		if (maxId == 0) {
+//			client.get(apiUrl, null, handler);
+//		} else {
+//			RequestParams params = new RequestParams();
+//			params.put("max_id", Long.toString(maxId));
+//			client.get(apiUrl, params, handler);
+//		}
+//		
+	}
+
+
+	public void getUserInfo(String screen_name, 
+            AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("users/show.json");
+        RequestParams params = new RequestParams();
+        params.put("screen_name", screen_name);
+        client.get(apiUrl, params, handler);  // if no params set, then just pass null
+    }
+	
 }

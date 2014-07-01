@@ -1,28 +1,45 @@
 package com.codepath.apps.basictwitter.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Tweet {
+import android.util.Log;
+
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
+@Table(name = "tweets")
+public class Tweet extends Model{
+	
+	@Column(name = "body")
 	private String body;
+	@Column(name = "uid", unique = true)
 	private long uid;
+	@Column(name = "createdAt")
 	private String createdAt;
+	@Column(name = "user")
 	private User user;
 	
-	public static Tweet fromJson(JSONObject obj) {
-		Tweet tweet = new Tweet();
+	
+	public Tweet() {
+		super();
+	}
+	
+	public Tweet(JSONObject obj) {
+		super();
 		try {
-			 tweet.body = obj.getString("text");
-			 tweet.uid = obj.getLong("id");
-			 tweet.createdAt = obj.getString("created_at");
-			 tweet.user = User.fromJson(obj.getJSONObject("user"));
-			 
+			 this.body      = obj.getString("text");
+			 this.uid       = obj.getLong("id");
+			 this.createdAt = obj.getString("created_at");
+			 this.user      = User.fetchUser(obj.getJSONObject("user"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return tweet;
 	}
 
 	public String getBody() {
@@ -51,12 +68,24 @@ public class Tweet {
 				e.printStackTrace();
 			}
 			
-			Tweet tweet = Tweet.fromJson(tweetJson);
+			Tweet tweet = new Tweet(tweetJson);
 			if (tweet != null) {
+				tweet.save();
 				tweets.add(tweet);
 			}
 		}
+		Log.d("debug", Tweet.recentTweets().toString());
+		Log.d("debug", User.recentUsers().toString());
 		return tweets;
+	}
+	
+	public static List<Tweet> recentTweets() {
+		return new Select().from(Tweet.class).orderBy("createdAt DESC").execute();
+	}
+	
+	@Override
+	public String toString() {
+		return Long.toString(this.uid);
 	}
 
 }

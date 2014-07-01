@@ -2,6 +2,8 @@ package com.codepath.apps.basictwitter;
 
 import android.content.Context;
 
+import com.activeandroid.ActiveAndroid;
+import com.codepath.oauth.OAuthBaseClient;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -21,6 +23,7 @@ public class TwitterApp extends com.activeandroid.app.Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		ActiveAndroid.initialize(this);
 		TwitterApp.context = this;
 
 		// Create global configuration and initialize ImageLoader with this configuration
@@ -33,6 +36,12 @@ public class TwitterApp extends com.activeandroid.app.Application {
 	}
 
 	public static TwitterClient getRestClient() {
-		return (TwitterClient) TwitterClient.getInstance(TwitterClient.class, TwitterApp.context);
+		return (TwitterClient) OAuthBaseClient.getInstance(TwitterClient.class, TwitterApp.context);
 	}
+	
+	@Override
+    public void onTerminate() {
+        super.onTerminate();
+        ActiveAndroid.dispose();
+    }
 }

@@ -10,6 +10,7 @@
         android:paddingTop="5dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:onClick="viewProfile"
         android:src="@drawable/ic_launcher" />
 
     <TextView
@@ -17,6 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="5dp"
+        android:textStyle="bold"
+        android:textColor="#575757"
         android:layout_alignTop="@+id/ivProfileImage"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:text="username" />
@@ -26,8 +29,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
-        android:layout_alignTop="@+id/ivProfileImage"
+        android:layout_alignBottom="@+id/tvUserName"
         android:layout_toRightOf="@+id/tvUserName"
+        android:textSize="12sp"
+        android:textColor="#575757"
         android:text="screename"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 	
@@ -35,8 +40,11 @@
         android:id="@+id/tvTimestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ivProfileImage"
+        android:layout_alignBottom="@+id/tvUserName"
         android:layout_alignParentRight="true"
+        android:textSize="12sp"
+        android:paddingRight="5dp"
+        android:textColor="#575757"
         android:text="timestamp" />
         
     <TextView
@@ -45,6 +53,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvUserName"
         android:layout_below="@+id/tvUserName"
-        android:text="body" />
+        android:text="body"
+        android:textColor="#575757"
+        android:autoLink="all"
+     	android:linksClickable="true" />
 
 </RelativeLayout>
