@@ -7,17 +7,20 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.Intent;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.basictwitter.models.Tweet;
-import com.codepath.apps.basictwitter.models.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 
 public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
@@ -41,44 +44,63 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 		
 		// find the views within the template
 		ImageView ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
-		ivProfileImage.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		ImageView ivContentImage = (ImageView) view.findViewById(R.id.ivContentImage);
 		TextView tvUserName   = (TextView) view.findViewById(R.id.tvUserName);
 		TextView tvScreenName = (TextView) view.findViewById(R.id.tvScreenName);
 		TextView tvBody		  = (TextView) view.findViewById(R.id.tvBody);
 		TextView tvTimestamp  = (TextView) view.findViewById(R.id.tvTimestamp);
+		ImageButton ibRetweet = (ImageButton) view.findViewById(R.id.ibRetweet);
+		ImageButton ibFavorite = (ImageButton) view.findViewById(R.id.ibFavorite);
+		
+		
+		ivContentImage.setImageResource(android.R.color.transparent);
 		ivProfileImage.setImageResource(android.R.color.transparent);
-		ivProfileImage.setTag(tvScreenName.getText().toString());
+		ivProfileImage.setTag(tweet.getUser().getScreenName());
 		ImageLoader imageLoader = ImageLoader.getInstance();
 		
 		// populate views with tweet data
-		imageLoader.displayImage(tweet.getUser().getProfileImageUrl(), ivProfileImage);
+		Picasso.with(getContext())
+			   .load(tweet.getUser().getProfileImageUrl())
+			   .into(ivProfileImage);
+//		imageLoader.displayImage(tweet.getUser().getProfileImageUrl(), ivProfileImage);
+//		Log.d("debug", "tweet.getContentImgUrl(): " + tweet.getContentImgUrl());
+		if (tweet.getContentImgUrl() != null) {
+//			imageLoader.displayImage(tweet.getContentImgUrl(), ivContentImage);
+			Picasso.with(getContext())
+				   .load(tweet.getContentImgUrl())
+				   //.resize(470, 320)
+				   .into(ivContentImage);
+		}
 		tvUserName.setText(tweet.getUser().getName());
 		tvScreenName.setText("@" + tweet.getUid());//getUser().getScreenName());
 		tvBody.setText(tweet.getBody());
 		tvTimestamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
 		
 		
-		final User user = tweet.getUser();
 		ivProfileImage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //client.setUser_timeline_max_id( screen_name, getMax_id() );
-                
                 Intent i = new Intent(getContext(), ProfileActivity.class);
-//                i.putExtra("user_id", user.getUserId() );
-                i.putExtra("screen_name", user.getScreenName() );
+                i.putExtra("screen_name", (String)v.getTag());
+                Log.d("debug", "v.getTag(): " + (String) v.getTag());
                 v.getContext().startActivity(i);
             }
-
         });
+		
+		ibRetweet.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "click Retweet", Toast.LENGTH_LONG).show();
+            }
+        });
+		
+		ibFavorite.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	Toast.makeText(getContext(), "click Favorite", Toast.LENGTH_LONG).show();
+            }
+        });
+
 		return view;
 	}
 	

@@ -16,21 +16,22 @@ public class MentionTimelineFragment extends TweetsListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ArrayList<Tweet> mentionsTweets = new ArrayList<Tweet>();
-		aTweets = new TweetArrayAdapter(getActivity(), mentionsTweets);
+//		ArrayList<Tweet> mentionsTweets = new ArrayList<Tweet>();
+//		aTweets = new TweetArrayAdapter(getActivity(), mentionsTweets);
 	}
 	
 	@Override
 	public void populateTimeline(String s) {
-		client.getMentionTimelineList(new JsonHttpResponseHandler() {
+		long maxId = 0;
+		if (!aTweets.isEmpty()) {
+			maxId = aTweets.getItem(aTweets.getCount() - 1).getUid() - 1;
+		}
+		
+		client.getMentionTimelineList(maxId, new JsonHttpResponseHandler() {
 			
 			@Override
 			public void onSuccess(JSONArray json) {
 				addAll(Tweet.fromJsonArray(json));
-				client.setMaxId(aTweets);
-				if (client.sinceId == 0) {
-					client.setSinceId(aTweets);
-				}
 			}
 			
 			@Override

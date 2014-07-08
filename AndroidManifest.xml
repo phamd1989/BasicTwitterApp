@@ -59,6 +59,10 @@
             android:label="@string/title_activity_profile"
             android:theme="@style/Theme.HighlightCopy" >
         </activity>
+        <activity
+            android:name="com.codepath.apps.basictwitter.TweetViewActivity"
+            android:label="@string/title_activity_tweet_view" >
+        </activity>
     </application>
 
 </manifest>

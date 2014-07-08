@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import com.codepath.apps.basictwitter.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /*
@@ -33,7 +32,7 @@ public class TwitterClient extends OAuthBaseClient {
 	public static final String REST_CALLBACK_URL = "oauth://cpbasictweets"; // Change this (here and in manifest)
 	
 	// maxId used for pagination
-	public long maxId = 0;
+//	public long maxId = 0;
 	public long sinceId = 0;
 	String tweet = "";
 	
@@ -42,56 +41,61 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 	
 	
-	public void getHomeTimelineList(AsyncHttpResponseHandler handler){
+	public void getHomeTimelineList(long maxTweetId, AsyncHttpResponseHandler handler){
+		Log.d("debug", "maxTweetId inside getHomeTimelineList: " + Long.toString(maxTweetId));
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		// Can specify query string params directly or through RequestParams.
-		if (maxId == 0) {
+		if (maxTweetId == 0) {
 			client.get(apiUrl, null, handler);
 		} else {
 			RequestParams params = new RequestParams();
-			params.put("max_id", Long.toString(maxId));
+			params.put("max_id", Long.toString(maxTweetId));
 			client.get(apiUrl, params, handler);
 		}
 	}
 	
 	
-	public void getUserMeInfo(AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("account/verify_credentials.json");
-		client.get(apiUrl, null, handler);
-	}
-	
-	public void getUserTimeline(String screen_name, AsyncHttpResponseHandler handler) {
+	public void getUserTimeline(String screen_name, long maxTweetId, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
-		if ( screen_name != null) {
+		if (screen_name != null) {
 			params.put("screen_name", screen_name);
-		} else {
+		}
+		if (maxTweetId != 0) {
+			params.put("max_id", Long.toString(maxTweetId));
+		}
+		Log.d("debug", "screen_name inside getUserTimeline: " + screen_name);
+		Log.d("debug", "maxTweetId inside getUserTimeline: " + Long.toString(maxTweetId));
+		if (screen_name == null && maxTweetId == 0) {
 			params = null;
 		}
 		client.get(apiUrl, params, handler);
 	}
 	
+	/**
+	 * request for posting a Tweet
+	 * @param handler
+	 */
 	public void postTweet(AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		RequestParams params = new RequestParams();
 		params.put("status", tweet);
 		client.post(apiUrl, params, handler);
 	}
+		
 	
-	public void setMaxId(ArrayAdapter<Tweet> aTweets) {
-		if (aTweets == null || aTweets.isEmpty()) {
-			return;
-		}
-		maxId = aTweets.getItem(aTweets.getCount() - 1).getUid();
-		Log.d("debug", Long.toString(maxId));
-		maxId--;
-	}
-	
+	/**
+	 * set body text for a Tweet
+	 * @param tweetBody
+	 */
 	public void setTweetBody(String tweetBody) {
 		tweet = tweetBody;
 	}
 
-
+	/**
+	 * refresh home_timeline, taking into account the since_id
+	 * @param handler
+	 */
 	public void refreshHomeTimeline(
 			AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
@@ -109,35 +113,37 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 
-	public void getMentionTimelineList(
+	public void getMentionTimelineList(long maxTweetId, 
 			AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
-		if (maxId == 0) {
+		if (maxTweetId == 0) {
 			client.get(apiUrl, null, handler);
 		} else {
 			RequestParams params = new RequestParams();
-			params.put("max_id", Long.toString(maxId));
+			params.put("max_id", Long.toString(maxTweetId));
 			client.get(apiUrl, params, handler);
 		}
-
-//		// Can specify query string params directly or through RequestParams.
-//		if (maxId == 0) {
-//			client.get(apiUrl, null, handler);
-//		} else {
-//			RequestParams params = new RequestParams();
-//			params.put("max_id", Long.toString(maxId));
-//			client.get(apiUrl, params, handler);
-//		}
-//		
 	}
 
-
+	
+	/**
+	 * Get any user information given their screen_name
+	 * @param screen_name
+	 * @param handler
+	 */
 	public void getUserInfo(String screen_name, 
             AsyncHttpResponseHandler handler) {
-        String apiUrl = getApiUrl("users/show.json");
-        RequestParams params = new RequestParams();
-        params.put("screen_name", screen_name);
-        client.get(apiUrl, params, handler);  // if no params set, then just pass null
+		Log.d("debug", "screen_name inside getUserInfo: " + screen_name); 
+		if (screen_name == null) {
+			String apiUrl = getApiUrl("account/verify_credentials.json");
+			client.get(apiUrl, null, handler);
+		} else {
+			String apiUrl = getApiUrl("users/show.json");
+	        RequestParams params = new RequestParams();
+	        params.put("screen_name", screen_name);
+	        client.get(apiUrl, params, handler);
+		}
+        
     }
 	
 }

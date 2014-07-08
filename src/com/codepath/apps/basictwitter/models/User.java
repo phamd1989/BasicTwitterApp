@@ -71,7 +71,7 @@ public class User extends Model{
 			 if (getUser(userId) == null) {
 				 User user = new User(obj);
 				 user.save();
-				 Log.d("debug", user.toString());
+//				 Log.d("debug", user.toString());
 				 return user;
 			 } else {
 				 return getUser(userId);
@@ -85,7 +85,11 @@ public class User extends Model{
 	private static User getUser(long userId) {
 		return (User) new Select().from(User.class).where("userId = ?", userId).executeSingle();
 	}
-
+	
+	public static User getUserFromScreenName(String screen_name) {
+		return (User) new Select().from(User.class).where("screenName = ?", screen_name).executeSingle();
+	}
+	
 	public String getName() {
 		return name;
 	}

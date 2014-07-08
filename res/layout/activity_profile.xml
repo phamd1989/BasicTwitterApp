@@ -72,14 +72,13 @@
     </RelativeLayout>
     
     
-    <fragment
-        android:id="@+id/fragmentUserTimeline"
-        android:name="com.codepath.apps.basictwitter.fragment.UserTimelineFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/rlHeader"
-        tools:layout="@layout/fragment_tweets_list" />
+    <FrameLayout
+       android:id="@+id/flActivityProfile"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentBottom="true"
+       android:layout_below="@+id/rlHeader">
+  	</FrameLayout>
 
 </RelativeLayout>

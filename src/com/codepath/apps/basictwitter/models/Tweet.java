@@ -24,7 +24,10 @@ public class Tweet extends Model{
 	private String createdAt;
 	@Column(name = "user")
 	private User user;
-	
+	@Column(name = "userScreenName")
+	private String userScreenName;
+	@Column(name = "contentImgUrl")
+	private String contentImgUrl;
 	
 	public Tweet() {
 		super();
@@ -33,13 +36,24 @@ public class Tweet extends Model{
 	public Tweet(JSONObject obj) {
 		super();
 		try {
-			 this.body      = obj.getString("text");
-			 this.uid       = obj.getLong("id");
-			 this.createdAt = obj.getString("created_at");
-			 this.user      = User.fetchUser(obj.getJSONObject("user"));
+			 this.body           = obj.getString("text");
+			 this.uid            = obj.getLong("id");
+			 this.createdAt      = obj.getString("created_at");
+			 this.user           = User.fetchUser(obj.getJSONObject("user"));
+			 this.userScreenName = this.user.getScreenName();
+			 JSONObject temp     = obj.getJSONObject("extended_entities");
+			 if (temp != null) {
+//				 Log.d("debug", "temp.toString(): " + temp.toString());
+				 this.contentImgUrl = temp.getJSONArray("media").getJSONObject(0).getString("media_url") + ":medium";
+//				 Log.d("debug", "contentImgUrl: " + contentImgUrl);
+			 }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String getContentImgUrl() {
+		return contentImgUrl;
 	}
 
 	public String getBody() {
@@ -64,19 +78,29 @@ public class Tweet extends Model{
 			JSONObject tweetJson = null;
 			try {
 				tweetJson = json.getJSONObject(i);
+				long tweetUid = tweetJson.getLong("id");
+				if (getTweet(tweetUid) == null) {
+					Tweet tweet = new Tweet(tweetJson);
+					if (tweet != null) {
+						tweet.save();
+//						Log.d("debug", "created_at: " + tweet.getCreatedAt());
+//						Log.d("debug", "id: " + tweet.getUid());
+						tweets.add(tweet);
+					}
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			Tweet tweet = new Tweet(tweetJson);
-			if (tweet != null) {
-				tweet.save();
-				tweets.add(tweet);
-			}
 		}
-		Log.d("debug", Tweet.recentTweets().toString());
-		Log.d("debug", User.recentUsers().toString());
+//		Log.d("debug", Tweet.recentTweets().toString());
+//		Log.d("debug", User.recentUsers().toString());
 		return tweets;
+	}
+	
+	
+	public static Tweet getTweet(JSONObject jsonObj) {
+		return null;
+		
 	}
 	
 	public static List<Tweet> recentTweets() {
@@ -87,5 +111,12 @@ public class Tweet extends Model{
 	public String toString() {
 		return Long.toString(this.uid);
 	}
+	
+	private static Tweet getTweet(long uid) {
+		return (Tweet) new Select().from(Tweet.class).where("uid = ?", uid).executeSingle();
+	}
 
+	public static List<Tweet> getTweetsForScreenName(String screenName) {
+		return new Select().from(Tweet.class).where("userScreenName = ?", screenName).execute();
+	}
 }

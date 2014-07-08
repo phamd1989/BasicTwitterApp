@@ -4,8 +4,10 @@ import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.activeandroid.util.Log;
 import com.codepath.apps.basictwitter.fragment.UserTimelineFragment;
@@ -26,25 +28,40 @@ public class ProfileActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
-		loadProfileInfo();
+		String screen_name = getIntent().getStringExtra("screen_name");
+		Toast.makeText(ProfileActivity.this, screen_name, Toast.LENGTH_LONG).show();
+		loadUserProfile(screen_name);
 	}
 
-//	private void loadUserProfile() {
-//		TwitterApp.getRestClient().getUserMeInfo(new JsonHttpResponseHandler() {
-//			@Override
-//			public void onSuccess(JSONObject userObj) {
-//				User user = User.fetchUser(userObj);
-//				getActionBar().setTitle("@" + user.getScreenName());
-//				populateProfileHeader(user);
-//			}
-//			
-//			@Override
-//			public void onFailure(Throwable e, String s) {
-//				Log.d("debug", e.toString());
-//				Log.d("debug", s.toString());
-//			}
-//		});
-//	}
+	private void loadUserProfile(final String screen_name) {
+		// give preference to database loading for the timeline tweets of each user
+		// actually it always does this because when we read a tweet, we also read a user
+		// so whatever tweet profile pic we click on, that user is already there in database
+		// EXCEPTION: screen_name IS NULL, or we click on the user_profile button
+		if (screen_name != null && User.getUserFromScreenName(screen_name) != null) {
+			Toast.makeText(ProfileActivity.this, "USE DATABASE", Toast.LENGTH_SHORT).show();
+			User user = User.getUserFromScreenName(screen_name);
+			populateProfileHeader(user);
+			populateProfileTimeline(screen_name);
+		} else {
+			Toast.makeText(ProfileActivity.this, "DO REQUEST", Toast.LENGTH_SHORT).show();
+			TwitterApp.getRestClient().getUserInfo(screen_name, new JsonHttpResponseHandler() {
+				@Override
+				public void onSuccess(JSONObject userObj) {
+					User user = User.fetchUser(userObj);
+					getActionBar().setTitle("@" + user.getScreenName());
+					populateProfileHeader(user);
+					populateProfileTimeline(screen_name);
+				}
+				
+				@Override
+				public void onFailure(Throwable e, String s) {
+					Log.d("debug", e.toString());
+					Log.d("debug", s.toString());
+				}
+			});
+		}
+	}
 
 	protected void populateProfileHeader(User user) {
 		ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
@@ -66,72 +83,11 @@ public class ProfileActivity extends FragmentActivity {
 	
 	
 	
-	protected void loadProfileInfo() {
-        String screen_name = getIntent().getStringExtra("screen_name");
-        
-        
-        if ( screen_name == null ) {
-            TwitterApp.getRestClient().getUserMeInfo(new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(JSONObject json) {
-                    User u = User.fetchUser(json);
-                    getActionBar().setTitle("@" + u.getScreenName());
-                    
-                    populateProfileHeader(u);
-                    populateProfileTimeline(u);
-                }
-                
-                @Override
-                public void onFailure(Throwable e, String s) {
-                    Log.d("ERROR", e.toString() );
-                    Log.d("ERROR", s);
-                }
-                
-                @Override
-                protected void handleFailureMessage(Throwable e, String s) {
-                    Log.d("ERROR", e.toString() );
-                    Log.d("ERROR", s);
-                }
-                
-            });
-        }
-        else {
-            TwitterApp.getRestClient().getUserInfo(screen_name, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(JSONObject json) {
-                    User u = User.fetchUser(json);
-                    getActionBar().setTitle("@" + u.getScreenName());
-                    populateProfileHeader(u);
-                    populateProfileTimeline(u);
-                }
-                
-                @Override
-                public void onFailure(Throwable e, String s) {
-                    Log.d("ERROR", e.toString() );
-                    Log.d("ERROR", s);
-                }
-                
-                @Override
-                protected void handleFailureMessage(Throwable e, String s) {
-                    Log.d("ERROR", e.toString() );
-                    Log.d("ERROR", s);
-                }
-            });
-        }
-
-    }
-
-	protected void populateProfileTimeline(User user) {
-		String screen_name = user.getScreenName();
-        
-        String debugStr = String.format( 
-                "loadProfileInfo: screen_name: %s ", screen_name );
-        Log.d("DEBUG", debugStr );
-        
-        UserTimelineFragment utf = 
-                (UserTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentUserTimeline);
-        utf.populateTimeline(screen_name);
-		
+	protected void populateProfileTimeline(String screen_name) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screen_name);
+		ft.replace(R.id.flActivityProfile, fragmentUserTimeline);
+		ft.commit();
 	}
 
 }
