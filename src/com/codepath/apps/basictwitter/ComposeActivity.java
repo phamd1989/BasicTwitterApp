@@ -2,7 +2,10 @@ package com.codepath.apps.basictwitter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +33,34 @@ public class ComposeActivity extends Activity {
 		ivProfileImage.setImageResource(android.R.color.transparent);
 		ImageLoader imageLoader = ImageLoader.getInstance();
 		imageLoader.displayImage(getIntent().getStringExtra("profile_img_url"), ivProfileImage);
+		
+		etTweet.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				if (s.toString().length() != 0) {
+					btnTweet.setBackgroundResource(R.drawable.selector_tweet_button);
+//					btnTweet.setBackgroundColor(Color.BLUE);
+				} else {
+					btnTweet.setBackgroundResource(R.drawable.shape_button_normal);
+//					btnTweet.setBackgroundColor(Color.YELLOW);
+				}
+			}
+		});
 	}
 
 	private void setupViews() {
@@ -39,6 +70,12 @@ public class ComposeActivity extends Activity {
 		etTweet        = (EditText) findViewById(R.id.etTweet);
 		btnTweet  	   = (Button) findViewById(R.id.btnTweet);
 		
+	}
+	
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_top);
 	}
 	
 	public void onTweet(View v) {

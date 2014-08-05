@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -13,11 +13,20 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:actionBarTabTextStyle">@style/ActionBarTabText</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabs</item>
     </style>
 	
-    
+    <!-- <style name="OrangeButton">
+        <item name="android:background"> @drawable/selector_tweet_button</item>
+        <item name="android:textColor"> #ffffff </item>
+        <item name="android:textSize"> 16sp </item>
+    </style>
+     -->
+     
     <style name="Theme.HighlightCopy" parent="@android:style/Theme.Holo">
        <item name="android:actionBarStyle">@style/Theme.HighlightCopy.ActionBar</item>
     </style>
@@ -25,4 +34,42 @@
     <style name="Theme.HighlightCopy.ActionBar" parent="@android:style/Widget.Holo.ActionBar">
        <item name="android:background">#33b5fa</item>
     </style>
+    
+    <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">#33b5fa</item>
+        <item name="android:backgroundStacked">#ffffff</item>
+        <item name="android:textColor">#8CF1FF</item>
+    </style>
+    
+    <style name="ActionBarTabText" parent="@android:style/Widget.Holo.ActionBar.TabText">
+        <item name="android:textColor">@color/selector_tab_color</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">18sp</item>    
+    </style>
+    
+    <style name="ActionBarTabs" parent="@android:style/Widget.Holo.ActionBar.TabView">
+        <item name="android:background">@drawable/actionbar_tab_indicator</item>
+    </style>
+    
+    <style name="ListBackContent">
+       <item name="android:layout_width">fill_parent</item>
+       <item name="android:layout_height">fill_parent</item>
+       <item name="android:background">@drawable/background_back</item>
+       <item name="android:gravity">right</item>
+   </style>
+   
+    <style name="ListFrontContent">
+       <item name="android:layout_width">fill_parent</item>
+       <item name="android:layout_height">fill_parent</item>
+       <item name="android:background">@drawable/background_front</item>
+       <item name="android:padding">8dp</item>
+   	</style>
+   
+    <style name="ListButtonAction">
+       <item name="android:layout_margin">5dp</item>
+         <item name="android:layout_width">80dp</item>
+       <item name="android:layout_height">30dp</item>
+ 
+   </style>
 </resources>

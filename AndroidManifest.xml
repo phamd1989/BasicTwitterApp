@@ -16,7 +16,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_twitter"
         android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme" >
+        android:theme="@style/AppTheme" >
         <meta-data
             android:name="AA_DB_NAME"
             android:value="RestClient.db" />
@@ -46,8 +46,7 @@
         </activity>
         <activity
             android:name="com.codepath.apps.basictwitter.HomeTimelineActivity"
-            android:label="@string/title_activity_home_timeline"
-            android:theme="@style/Theme.HighlightCopy" >
+            android:label="@string/title_activity_home_timeline" >
         </activity>
         <activity
             android:name="com.codepath.apps.basictwitter.ComposeActivity"

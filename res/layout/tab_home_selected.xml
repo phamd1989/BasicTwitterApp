@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/twitter_tab"
+    tools:context="${packageName}.${activityClass}" >
+
+	<TextView 
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:id="@+id/home"
+    	android:textColor="#00AEFF"
+    	android:gravity="center"
+    	android:text="Home"
+    	android:layout_marginBottom="10dp" >
+    
+    </TextView>
+    
+    
+</RelativeLayout>

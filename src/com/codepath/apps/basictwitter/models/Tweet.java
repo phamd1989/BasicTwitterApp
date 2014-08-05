@@ -107,6 +107,10 @@ public class Tweet extends Model{
 		return new Select().from(Tweet.class).orderBy("createdAt DESC").execute();
 	}
 	
+	public static List<Tweet> getMentionedTweets() {
+		return new Select().from(Tweet.class).where("userScreenName = ?", "DungPhamd1989").execute();
+	}
+ 	
 	@Override
 	public String toString() {
 		return Long.toString(this.uid);

@@ -32,12 +32,22 @@ public class ProfileActivity extends FragmentActivity {
 		Toast.makeText(ProfileActivity.this, screen_name, Toast.LENGTH_LONG).show();
 		loadUserProfile(screen_name);
 	}
-
-	private void loadUserProfile(final String screen_name) {
+	
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+	}
+	
+	private void loadUserProfile(String screenName) {
 		// give preference to database loading for the timeline tweets of each user
 		// actually it always does this because when we read a tweet, we also read a user
 		// so whatever tweet profile pic we click on, that user is already there in database
 		// EXCEPTION: screen_name IS NULL, or we click on the user_profile button
+		if (screenName == null) {
+			screenName = "DungPhamd1989";
+		}
+		final String screen_name = screenName;
 		if (screen_name != null && User.getUserFromScreenName(screen_name) != null) {
 			Toast.makeText(ProfileActivity.this, "USE DATABASE", Toast.LENGTH_SHORT).show();
 			User user = User.getUserFromScreenName(screen_name);

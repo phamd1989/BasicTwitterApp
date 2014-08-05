@@ -53,6 +53,7 @@
         android:layout_below="@+id/etTweet"
         android:layout_marginTop="10dp"
         android:onClick="onTweet"
+        android:background="@+drawable/shape_button_normal"
         android:text="Tweet" />
     
 </RelativeLayout>

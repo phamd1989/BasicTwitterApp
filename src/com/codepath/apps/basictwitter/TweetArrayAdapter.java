@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,13 +46,13 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 		// find the views within the template
 		ImageView ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
 		ImageView ivContentImage = (ImageView) view.findViewById(R.id.ivContentImage);
-		TextView tvUserName   = (TextView) view.findViewById(R.id.tvUserName);
-		TextView tvScreenName = (TextView) view.findViewById(R.id.tvScreenName);
-		TextView tvBody		  = (TextView) view.findViewById(R.id.tvBody);
-		TextView tvTimestamp  = (TextView) view.findViewById(R.id.tvTimestamp);
-		ImageButton ibRetweet = (ImageButton) view.findViewById(R.id.ibRetweet);
-		ImageButton ibFavorite = (ImageButton) view.findViewById(R.id.ibFavorite);
-		
+		TextView tvUserName      = (TextView) view.findViewById(R.id.tvUserName);
+		TextView tvScreenName    = (TextView) view.findViewById(R.id.tvScreenName);
+		TextView tvBody		     = (TextView) view.findViewById(R.id.tvBody);
+		TextView tvTimestamp     = (TextView) view.findViewById(R.id.tvTimestamp);
+		ImageButton ibRetweet    = (ImageButton) view.findViewById(R.id.ibRetweet);
+		ImageButton ibFavorite   = (ImageButton) view.findViewById(R.id.ibFavorite);
+		Button btnDelete         = (Button) view.findViewById(R.id.delete_tweet); 
 		
 		ivContentImage.setImageResource(android.R.color.transparent);
 		ivProfileImage.setImageResource(android.R.color.transparent);
@@ -100,7 +101,15 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
             	Toast.makeText(getContext(), "click Favorite", Toast.LENGTH_LONG).show();
             }
         });
-
+		
+		btnDelete.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getContext(), "you want to delete a tweet?", Toast.LENGTH_LONG).show();
+			}
+		});
+		
 		return view;
 	}
 	

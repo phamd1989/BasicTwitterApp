@@ -1,10 +1,16 @@
 package com.codepath.apps.basictwitter.listerner;
 
+import com.codepath.apps.basictwitter.R;
+import com.codepath.apps.basictwitter.fragment.HomeTimelineFragment;
+
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.TextView;
 
 public class FragmentTabListener<T extends Fragment> implements TabListener {
         private Fragment mFragment;
@@ -36,6 +42,8 @@ public class FragmentTabListener<T extends Fragment> implements TabListener {
 
 	public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
 		FragmentTransaction sft = mActivity.getSupportFragmentManager().beginTransaction();
+		sft.setCustomAnimations(R.anim.slide_in_left_frag, R.anim.slide_out_right_frag);
+		
 		// Check if the fragment is already initialized
 		if (mFragment == null) {
 			// If not, instantiate and add it to the activity
@@ -45,6 +53,8 @@ public class FragmentTabListener<T extends Fragment> implements TabListener {
 			// If it exists, simply attach it in order to show it
 			sft.attach(mFragment);
 		}
+		
+		
 		sft.commit();
 	}
 
@@ -54,9 +64,23 @@ public class FragmentTabListener<T extends Fragment> implements TabListener {
 			// Detach the fragment, because another one is being attached
 			sft.detach(mFragment);
 		}
+		
 		sft.commit();
 	}
-
+	
+	
+	private void changeTabTextColor(Tab tab, int color) {
+		
+		View v = (View) tab.getCustomView();
+		TextView tvHome = (TextView) v.findViewById(R.id.home);
+		TextView tvMentions = (TextView) v.findViewById(R.id.mentions);
+		if (tvHome != null) {
+			tvHome.setTextColor(color);
+		} else if (tvMentions != null) {
+			tvMentions.setTextColor(color);
+		}
+	}
+	
 	public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) {
 		// User selected the already selected tab. Usually do nothing.
 	}

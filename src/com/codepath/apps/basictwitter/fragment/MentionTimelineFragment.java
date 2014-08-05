@@ -11,13 +11,17 @@ import com.codepath.apps.basictwitter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class MentionTimelineFragment extends TweetsListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		ArrayList<Tweet> mentionsTweets = new ArrayList<Tweet>();
-//		aTweets = new TweetArrayAdapter(getActivity(), mentionsTweets);
+		
+		if (!Tweet.getMentionedTweets().isEmpty()) {
+			Toast.makeText(getActivity(), "LOADING FROM DATABASE", Toast.LENGTH_LONG).show();
+			addAll(Tweet.getMentionedTweets());
+		}
 	}
 	
 	@Override
@@ -42,14 +46,14 @@ public class MentionTimelineFragment extends TweetsListFragment {
 		});
 	}
 	
-	@Override
-	public EndlessScrollListener populateEndlessScrollListener(String screen_name) {
-		return new EndlessScrollListener() {
-				@Override
-				public void onLoadMore(int totalItemsCount) {
-					populateTimeline(null);
-				}
-			};
-	}
+//	@Override
+//	public EndlessScrollListener populateEndlessScrollListener(String screen_name) {
+//		return new EndlessScrollListener() {
+//				@Override
+//				public void onLoadMore(int totalItemsCount) {
+//					populateTimeline(null);
+//				}
+//			};
+//	}
 }
 

@@ -60,14 +60,14 @@ public class HomeTimelineFragment extends TweetsListFragment {
 //		aTweets.addAll(tweets);
 //	}
 
-	@Override
-	public EndlessScrollListener populateEndlessScrollListener(String s) {
-		return new EndlessScrollListener() {
-				@Override
-				public void onLoadMore(int totalItemsCount) {
-					populateTimeline(null);
-				}
-			};
-	}
-	
+//	@Override
+//	public EndlessScrollListener populateEndlessScrollListener(String s) {
+//		return new EndlessScrollListener() {
+//				@Override
+//				public void onLoadMore(int totalItemsCount) {
+//					populateTimeline(null);
+//				}
+//			};
+//	}
+//	
 }

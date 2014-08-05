@@ -4,13 +4,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-
-    <eu.erikw.PullToRefreshListView
+	
+    
+    	<!-- temporarily disabled to do the swipe listview's item
+    	 -->
+    	
+    	<!-- <eu.erikw.PullToRefreshListView
         android:id="@+id/lvTweets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="#89CFF0"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp" /> -->
     
     
+    <com.fortysevendeg.swipelistview.SwipeListView
+ 		 xmlns:swipe="http://schemas.android.com/apk/res-auto"
+		 android:id="@+id/lvTweets"
+		 android:listSelector="#00000000"
+		 android:layout_width="fill_parent"
+		 android:layout_height="wrap_content"
+		 android:divider="#89CFF0"
+		 android:dividerHeight="1dp"
+		 swipe:swipeFrontView="@+id/front"
+		 swipe:swipeBackView="@+id/back"
+		 swipe:swipeActionLeft="reveal"
+		 swipe:swipeActionRight="dismiss"
+		 swipe:swipeMode="both"
+		 swipe:swipeCloseAllItemsWhenMoveList="true"
+		 android:focusableInTouchMode="true" />
+
 </LinearLayout>

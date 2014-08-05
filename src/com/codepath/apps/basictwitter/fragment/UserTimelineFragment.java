@@ -60,13 +60,13 @@ public class UserTimelineFragment extends TweetsListFragment{
 		});
 	}
 	
-	@Override
-	public EndlessScrollListener populateEndlessScrollListener(final String screen_name) {
-		return new EndlessScrollListener() {
-				@Override
-				public void onLoadMore(int totalItemsCount) {
-					populateTimeline(screen_name);
-				}
-			};
-	}
+//	@Override
+//	public EndlessScrollListener populateEndlessScrollListener(final String screen_name) {
+//		return new EndlessScrollListener() {
+//				@Override
+//				public void onLoadMore(int totalItemsCount) {
+//					populateTimeline(screen_name);
+//				}
+//			};
+//	}
 }
