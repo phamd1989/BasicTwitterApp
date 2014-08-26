@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.text.format.DateUtils;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.basictwitter.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.picasso.Picasso;
 
@@ -115,10 +118,39 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
             }
         });
 		
+		boolean retweet = tweet.isRetweet();
+		if ( retweet )
+			ibRetweet.setImageResource(R.drawable.ic_retweeted);
+        else {
+        	ibRetweet.setImageResource(R.drawable.ic_retweet);
+        }
+		
+		final TwitterClient client = TwitterApp.getRestClient();
 		ibRetweet.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Toast.makeText(getContext(), "click Favorite", Toast.LENGTH_LONG).show();
+            	client.setTweetId(tweet.getUid());
+        		client.retweetTweet(new JsonHttpResponseHandler(){
+            		@Override
+        			public void onSuccess(JSONObject jsonObj) {
+        				Toast.makeText(getContext(), "retweeted", Toast.LENGTH_SHORT).show();
+        				boolean retweetedChanged = !tweet.isRetweet();
+                    	tweet.setRetweet( retweetedChanged );
+                    	tweet.save();
+                        if ( retweetedChanged ) {
+                        	ibRetweet.setImageResource(R.drawable.ic_retweeted);
+                        }
+                        else {
+                        	ibRetweet.setImageResource(R.drawable.ic_retweet);
+                        }
+        			}
+        			
+        			@Override
+        			public void onFailure(Throwable e, String s) {
+        				Log.d("debug", e.toString());
+        				Log.d("debug", s.toString());
+        			}
+            	});
             }
         });
 		

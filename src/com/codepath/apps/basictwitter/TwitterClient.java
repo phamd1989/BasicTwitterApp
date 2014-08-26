@@ -35,6 +35,7 @@ public class TwitterClient extends OAuthBaseClient {
 //	public long maxId = 0;
 	public long sinceId = 0;
 	String tweet = "";
+	long tweetId = 0;
 	
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
@@ -85,7 +86,21 @@ public class TwitterClient extends OAuthBaseClient {
 		params.put("status", tweet);
 		client.post(apiUrl, params, handler);
 	}
-		
+	
+	/**
+	 * request for retweeting a Tweet
+	 * @param handler
+	 */
+	public void retweetTweet(AsyncHttpResponseHandler handler) {
+		Log.d("debug", "Inside retweeting");
+		String apiUrl = getApiUrl("statuses/retweet/" + Long.toString(tweetId) + ".json");
+		RequestParams params = new RequestParams();
+		params.put("id", Long.toString(tweetId));
+//		Log.d("apiUrl: ", apiUrl);
+//		Log.d("params: ", params.toString());
+		client.post(apiUrl, params, handler);
+	}
+	
 	
 	/**
 	 * set body text for a Tweet
@@ -94,7 +109,12 @@ public class TwitterClient extends OAuthBaseClient {
 	public void setTweetBody(String tweetBody) {
 		tweet = tweetBody;
 	}
-
+	
+	public void setTweetId(long aId) {
+		tweetId = aId;
+		Log.d("debug", "tweetId: " + Long.toString(tweetId));
+	}
+	
 	/**
 	 * refresh home_timeline, taking into account the since_id
 	 * @param handler
