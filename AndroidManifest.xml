@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -51,7 +51,7 @@
         <activity
             android:name="com.codepath.apps.basictwitter.ComposeActivity"
             android:label="@string/title_activity_compose"
-            android:theme="@style/Theme.HighlightCopy" >
+            android:theme="@style/Theme.HighlightCopy.ActionBarForMenu" >
         </activity>
         <activity
             android:name="com.codepath.apps.basictwitter.ProfileActivity"
@@ -61,6 +61,20 @@
         <activity
             android:name="com.codepath.apps.basictwitter.TweetViewActivity"
             android:label="@string/title_activity_tweet_view" >
+        </activity>
+
+        <service
+            android:name="com.codepath.apps.basictwitter.TimelineService"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.codepath.apps.basictwitter.AlarmReceiver"
+            android:process=":remote" >
+        </receiver>
+
+        <activity
+            android:name="com.codepath.apps.basictwitter.CreateNotificationActivity"
+            android:label="@string/title_activity_create_notification" >
         </activity>
     </application>
 

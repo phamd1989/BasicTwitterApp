@@ -10,7 +10,7 @@
             style="@style/ListBackContent">
         <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/delete_tweet"
                 style="@style/ListButtonAction"
                 android:text="Delete" />
@@ -97,8 +97,8 @@
 	        android:layout_below="@+id/ivContentImage"
 	        android:layout_alignLeft="@+id/ivContentImage"
 	        android:paddingTop="2dp"
-	        android:background="#ffffff"
-	        android:src="@drawable/ic_retweet" />
+	        android:background="@drawable/selector_favorite_button"
+	        />
 	    
 	    <ImageButton
 	        android:id="@+id/ibFavorite"

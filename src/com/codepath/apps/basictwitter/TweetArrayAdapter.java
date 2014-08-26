@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -34,7 +37,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Tweet tweet = getItem(position);
+		final Tweet tweet = getItem(position);
 		View view;
 		if (convertView == null) {
 			LayoutInflater inflator = LayoutInflater.from(getContext());
@@ -52,11 +55,12 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 		TextView tvTimestamp     = (TextView) view.findViewById(R.id.tvTimestamp);
 		ImageButton ibRetweet    = (ImageButton) view.findViewById(R.id.ibRetweet);
 		ImageButton ibFavorite   = (ImageButton) view.findViewById(R.id.ibFavorite);
-		Button btnDelete         = (Button) view.findViewById(R.id.delete_tweet); 
+		Button btnDelete         = (Button) view.findViewById(R.id.delete_tweet);
 		
 		ivContentImage.setImageResource(android.R.color.transparent);
 		ivProfileImage.setImageResource(android.R.color.transparent);
 		ivProfileImage.setTag(tweet.getUser().getScreenName());
+		ivContentImage.setVisibility(View.GONE);
 		ImageLoader imageLoader = ImageLoader.getInstance();
 		
 		// populate views with tweet data
@@ -71,9 +75,10 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 				   .load(tweet.getContentImgUrl())
 				   //.resize(470, 320)
 				   .into(ivContentImage);
+			ivContentImage.setVisibility(View.VISIBLE);
 		}
 		tvUserName.setText(tweet.getUser().getName());
-		tvScreenName.setText("@" + tweet.getUid());//getUser().getScreenName());
+		tvScreenName.setText("@" + tweet.getUser().getScreenName());
 		tvBody.setText(tweet.getBody());
 		tvTimestamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
 		
@@ -102,11 +107,36 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
             }
         });
 		
+		final Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.fade_anim);
+		final View viewTweet = view;
 		btnDelete.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getContext(), "you want to delete a tweet?", Toast.LENGTH_LONG).show();
+//				Toast.makeText(getContext(), "you want to delete a tweet?", Toast.LENGTH_SHORT).show();
+//				remove(tweet);
+//				notifyDataSetChanged();
+				anim.setAnimationListener(new AnimationListener() {
+					
+					@Override
+					public void onAnimationStart(Animation animation) {
+						viewTweet.setHasTransientState(false);
+					}
+					
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						// TODO Auto-generated method stub
+						remove(tweet);
+						viewTweet.setHasTransientState(true);
+					}
+				});
+				viewTweet.startAnimation(anim);
 			}
 		});
 		

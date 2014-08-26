@@ -35,8 +35,8 @@ public class TwitterApp extends com.activeandroid.app.Application {
 		ImageLoader.getInstance().init(config);
 	}
 
-	public static DisasterNewsClient getRestClient() {
-		return (DisasterNewsClient) OAuthBaseClient.getInstance(DisasterNewsClient.class, TwitterApp.context);
+	public static TwitterClient getRestClient() {
+		return (TwitterClient) OAuthBaseClient.getInstance(TwitterClient.class, TwitterApp.context);
 	}
 	
 	@Override

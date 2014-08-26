@@ -3,32 +3,24 @@ package com.codepath.apps.basictwitter.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
 
-import com.codepath.apps.basictwitter.EndlessScrollListener;
 import com.codepath.apps.basictwitter.R;
 import com.codepath.apps.basictwitter.TweetArrayAdapter;
-import com.codepath.apps.basictwitter.TweetViewActivity;
 import com.codepath.apps.basictwitter.TwitterApp;
-import com.codepath.apps.basictwitter.DisasterNewsClient;
+import com.codepath.apps.basictwitter.TwitterClient;
 import com.codepath.apps.basictwitter.models.Tweet;
-
-import eu.erikw.PullToRefreshListView;
-
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.fortysevendeg.swipelistview.SwipeListViewListener;
 
 public abstract class TweetsListFragment extends Fragment {
-	protected DisasterNewsClient client;
+	protected TwitterClient client;
 	protected TweetArrayAdapter aTweets;
 	protected SwipeListView lvTweets;
 	
@@ -167,25 +159,34 @@ public abstract class TweetsListFragment extends Fragment {
 			}
 		});
 		
-//		lvTweets.setSwipeMode(SwipeListView.SWIPE_MODE_LEFT); // there are five swiping modes
-//		lvTweets.setSwipeActionLeft(SwipeListView.SWIPE_ACTION_REVEAL); //there are four swipe actions
-//		lvTweets.setSwipeActionRight(SwipeListView.SWIPE_ACTION_REVEAL);
-		lvTweets.setAnimationTime(50); // Animation time
+		lvTweets.setSwipeMode(SwipeListView.SWIPE_MODE_LEFT); // there are five swiping modes
+//		lvTweets.setSwipeMode(SwipeListView.SWIPE_M);
+		lvTweets.setSwipeActionLeft(SwipeListView.SWIPE_ACTION_REVEAL); //there are four swipe actions
+		lvTweets.setSwipeActionRight(SwipeListView.SWIPE_ACTION_DISMISS);
+		lvTweets.setOffsetLeft(convertDpToPixel(300f));
+		lvTweets.setAnimationTime(1000); // Animation time
+//		lvTweets.setsw
 //		lvTweets.setSwipeOpenOnLongPress(true); // enable or disable SwipeOpenOnLongPress
 		
 		return v;
 	}
 	
 	
+	private float convertDpToPixel(float dp) {
+		DisplayMetrics metrics = getResources().getDisplayMetrics();
+	    float px = dp * (metrics.densityDpi / 160f);
+	    return (int) px;
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-				
 	}
 	
 	public void addAll(List<Tweet> tweets) {
 		aTweets.addAll(tweets);
+		aTweets.notifyDataSetChanged();
 	}
 	
 	public abstract void populateTimeline(String screen_name);

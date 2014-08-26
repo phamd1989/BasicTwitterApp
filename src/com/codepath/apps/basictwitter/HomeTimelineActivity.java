@@ -16,12 +16,13 @@ import com.codepath.apps.basictwitter.fragment.HomeTimelineFragment;
 import com.codepath.apps.basictwitter.fragment.MentionTimelineFragment;
 import com.codepath.apps.basictwitter.listerner.FragmentTabListener;
 import com.codepath.apps.basictwitter.models.Tweet;
+import com.codepath.apps.basictwitter.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class HomeTimelineActivity extends FragmentActivity {
 	
 	private static final int REQUEST_CODE = 50;
-	private DisasterNewsClient client;
+	private TwitterClient client;
 	
 	private String myUserName;
 	private String myScreenName;
@@ -132,6 +133,14 @@ public class HomeTimelineActivity extends FragmentActivity {
 	public void onCompose(MenuItem mi) {
 		Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
 		Intent i = new Intent(HomeTimelineActivity.this, ComposeActivity.class);
+		
+		User me = User.getUserFromScreenName("DungPhamd1989");
+		if (me != null ) {
+			this.myUserName      = me.getName();
+			this.myScreenName    = me.getScreenName();
+			this.myProfileImgUrl = me.getProfileImageUrl();
+		}
+		
 		i.putExtra("user_name", this.myUserName);
 		i.putExtra("screen_name", this.myScreenName);
 		i.putExtra("profile_img_url", this.myProfileImgUrl);
