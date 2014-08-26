@@ -52,9 +52,7 @@ public class ComposeActivity extends Activity {
 		final TextView tvScreenName   = (TextView) findViewById(R.id.tvScreenName);
 		
 		tvUserName.setText(getIntent().getStringExtra("user_name"));
-		Toast.makeText(this, getIntent().getStringExtra("user_name"), Toast.LENGTH_SHORT).show();
 		tvScreenName.setText(getIntent().getStringExtra("screen_name"));
-		Toast.makeText(this, getIntent().getStringExtra("screen_name"), Toast.LENGTH_SHORT).show();
 		
 		ivProfileImage.setImageResource(android.R.color.transparent);
 		ImageLoader imageLoader = ImageLoader.getInstance();

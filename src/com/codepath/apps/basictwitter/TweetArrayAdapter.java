@@ -53,8 +53,8 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 		TextView tvScreenName    = (TextView) view.findViewById(R.id.tvScreenName);
 		TextView tvBody		     = (TextView) view.findViewById(R.id.tvBody);
 		TextView tvTimestamp     = (TextView) view.findViewById(R.id.tvTimestamp);
-		ImageButton ibRetweet    = (ImageButton) view.findViewById(R.id.ibRetweet);
-		ImageButton ibFavorite   = (ImageButton) view.findViewById(R.id.ibFavorite);
+		final ImageButton ibRetweet    = (ImageButton) view.findViewById(R.id.ibRetweet);
+		final ImageButton ibFavorite   = (ImageButton) view.findViewById(R.id.ibFavorite);
 		Button btnDelete         = (Button) view.findViewById(R.id.delete_tweet);
 		
 		ivContentImage.setImageResource(android.R.color.transparent);
@@ -93,14 +93,29 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
             }
         });
 		
-		ibRetweet.setOnClickListener(new OnClickListener() {
+		boolean favorite = tweet.isFavorite();
+		if ( favorite )
+        	ibFavorite.setImageResource(R.drawable.ic_favorite_good_yellow);
+        else {
+        	ibFavorite.setImageResource(R.drawable.ic_favorite);
+        }
+		ibFavorite.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "click Retweet", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(), "click Retweet", Toast.LENGTH_LONG).show();
+            	boolean favoriteChanged = !tweet.isFavorite();
+            	tweet.setFavorite( favoriteChanged );
+            	tweet.save();
+                if ( favoriteChanged ) {
+                	ibFavorite.setImageResource( R.drawable.ic_favorite_good_yellow );
+                }
+                else {
+                	ibFavorite.setImageResource( R.drawable.ic_favorite);
+                }
             }
         });
 		
-		ibFavorite.setOnClickListener(new OnClickListener() {
+		ibRetweet.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
             	Toast.makeText(getContext(), "click Favorite", Toast.LENGTH_LONG).show();
