@@ -84,12 +84,13 @@
     <style name="ListFrontContent">
        <item name="android:layout_width">fill_parent</item>
        <item name="android:layout_height">fill_parent</item>
-       <item name="android:background">@drawable/background_front</item>
+       <item name="android:background">#ffffff</item>
        <item name="android:padding">8dp</item>
    	</style>
    
     <style name="ListButtonAction">
        <item name="android:gravity">center</item>
        <item name="android:background">#ff0000</item>
+       <item name="android:textColor">#ffffff</item>
    </style>
 </resources>

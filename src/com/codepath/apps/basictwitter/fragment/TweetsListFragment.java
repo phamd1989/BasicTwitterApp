@@ -163,7 +163,7 @@ public abstract class TweetsListFragment extends Fragment {
 //		lvTweets.setSwipeMode(SwipeListView.SWIPE_M);
 		lvTweets.setSwipeActionLeft(SwipeListView.SWIPE_ACTION_REVEAL); //there are four swipe actions
 		lvTweets.setSwipeActionRight(SwipeListView.SWIPE_ACTION_DISMISS);
-		lvTweets.setOffsetLeft(convertDpToPixel(300f));
+		lvTweets.setOffsetLeft(convertDpToPixel(320f));
 		lvTweets.setAnimationTime(1000); // Animation time
 //		lvTweets.setsw
 //		lvTweets.setSwipeOpenOnLongPress(true); // enable or disable SwipeOpenOnLongPress
