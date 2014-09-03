@@ -1,25 +1,3 @@
-Homework submission for Animations and Gestures
-
-![Screenshot] (https://raw.githubusercontent.com/phamd1989/BasicTwitterApp/master/gif/twitter_part3.gif)
-
-
-
-
-
-
-Meet the requirements!
-
-![Screenshot] (https://raw.githubusercontent.com/phamd1989/BasicTwitterApp/master/gif/twitter_part2.gif)
-
-
-
-
-
-
-
-
-![Screenshot] (https://raw.githubusercontent.com/phamd1989/BasicTwitterApp/master/gif/basic_twitter.gif)
-
 
 # RestClientTemplate
 
